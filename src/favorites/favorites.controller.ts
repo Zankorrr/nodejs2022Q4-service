@@ -32,29 +32,29 @@ export class FavoritesController {
       tracks: [],
     };
 
-    try {
-      responseFavorites.albums = this.favoritesService
-        .findAll()
-        .albums.map((albumId) => {
+    responseFavorites.albums = this.favoritesService
+      .findAll()
+      .albums.map((albumId) => {
+        try {
           return this.albumsService.findOne(albumId);
-        });
-    } catch (error) {}
+        } catch (error) {}
+      });
 
-    try {
-      responseFavorites.artists = this.favoritesService
-        .findAll()
-        .artists.map((artistId) => {
+    responseFavorites.artists = this.favoritesService
+      .findAll()
+      .artists.map((artistId) => {
+        try {
           return this.artistsService.findOne(artistId);
-        });
-    } catch (error) {}
+        } catch (error) {}
+      });
 
-    try {
-      responseFavorites.tracks = this.favoritesService
-        .findAll()
-        .tracks.map((trackId) => {
+    responseFavorites.tracks = this.favoritesService
+      .findAll()
+      .tracks.map((trackId) => {
+        try {
           return this.tracksService.findOne(trackId);
-        });
-    } catch (error) {}
+        } catch (error) {}
+      });
 
     return responseFavorites;
   }
@@ -78,10 +78,6 @@ export class FavoritesController {
   @Delete('track/:id')
   @HttpCode(204)
   removeTrack(@Param('id') id: string) {
-    const track = this.tracksService.findOne(id);
-    if (!track) {
-      throw new NotFoundException('Track not found');
-    }
     return this.favoritesService.removeTrack(id);
   }
 

@@ -8,13 +8,17 @@ import {
   Delete,
   HttpCode,
 } from '@nestjs/common';
+import { TracksService } from 'src/tracks/tracks.service';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 
 @Controller('artist')
 export class ArtistsController {
-  constructor(private readonly artistsService: ArtistsService) {}
+  constructor(
+    private readonly artistsService: ArtistsService,
+    private readonly trackService: TracksService,
+  ) {}
 
   @Post()
   create(@Body() artistDto: CreateArtistDto) {
@@ -39,6 +43,12 @@ export class ArtistsController {
   @Delete(':id')
   @HttpCode(204)
   remove(@Param('id') id: string) {
+    const tracks = this.trackService.findAll();
+    tracks.forEach((track) => {
+      if (track.artistId === id) {
+        this.trackService.update(track.id, { ...track, artistId: null });
+      }
+    });
     return this.artistsService.delete(id);
   }
 }
