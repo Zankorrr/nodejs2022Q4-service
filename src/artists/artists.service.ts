@@ -14,14 +14,6 @@ export class ArtistsService {
   constructor(@Inject('IArtistsStore') private storage: IArtistsStore) {}
 
   create(artistDto: CreateArtistDto) {
-    if (
-      typeof artistDto.name !== 'string' ||
-      typeof artistDto.grammy !== 'boolean'
-    ) {
-      throw new BadRequestException(
-        'Request body must contain required fields',
-      );
-    }
     return this.storage.create(artistDto);
   }
 
@@ -47,14 +39,6 @@ export class ArtistsService {
     const artist = this.storage.findOne(id);
     if (!artist) {
       throw new NotFoundException('Artist not found');
-    }
-    if (
-      typeof artistDto.name !== 'string' ||
-      typeof artistDto.grammy !== 'boolean'
-    ) {
-      throw new BadRequestException(
-        'Request body.name must be string, body.grammy must me boolean',
-      );
     }
     return this.storage.update(id, artistDto);
   }

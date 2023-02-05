@@ -5,7 +5,6 @@ import {
   Param,
   Delete,
   HttpCode,
-  NotFoundException,
   UnprocessableEntityException,
   BadRequestException,
 } from '@nestjs/common';

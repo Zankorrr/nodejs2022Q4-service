@@ -12,15 +12,8 @@ import { validate } from 'uuid';
 @Injectable()
 export class AlbumsService {
   constructor(@Inject('IAlbumsStore') private storage: IAlbumsStore) {}
+
   create(albumDto: CreateAlbumDto) {
-    if (
-      typeof albumDto.name !== 'string' ||
-      typeof albumDto.year !== 'number'
-    ) {
-      throw new BadRequestException(
-        'Request body must contain required fields',
-      );
-    }
     return this.storage.create(albumDto);
   }
 
@@ -46,14 +39,6 @@ export class AlbumsService {
     const album = this.storage.findOne(id);
     if (!album) {
       throw new NotFoundException('Album not found');
-    }
-    if (
-      typeof albumDto.name !== 'string' ||
-      typeof albumDto.year !== 'number'
-    ) {
-      throw new BadRequestException(
-        'Request body.name must be string, body.year must me number',
-      );
     }
     return this.storage.update(id, albumDto);
   }

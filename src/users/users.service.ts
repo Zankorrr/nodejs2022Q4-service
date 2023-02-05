@@ -17,11 +17,6 @@ export class UsersService {
   constructor(@Inject('IUsersStore') private storage: IUsersStore) {}
 
   create(userDto: CreateUserDto) {
-    if (!userDto.login || !userDto.password) {
-      throw new BadRequestException(
-        'Request body must contain required fields',
-      );
-    }
     const { password, ...rest } = this.storage.create(userDto);
     return rest;
   }
@@ -48,11 +43,6 @@ export class UsersService {
   update(id: string, userDto: UpdateUserDto) {
     if (!validate(id)) {
       throw new BadRequestException('UserId is invalid (not uuid)');
-    }
-    if (!userDto.oldPassword || !userDto.newPassword) {
-      throw new BadRequestException(
-        'Request body must contain required fields',
-      );
     }
     const user = this.storage.findOne(id);
     if (!user) {
