@@ -12,5 +12,6 @@ import { InMemoryAlbumsStore } from './store/albums-store';
       useClass: InMemoryAlbumsStore,
     },
   ],
+  exports: [AlbumsService],
 })
 export class AlbumsModule {}

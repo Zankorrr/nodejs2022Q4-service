@@ -12,5 +12,6 @@ import { InMemoryTracksStore } from './store/tracks-store';
       useClass: InMemoryTracksStore,
     },
   ],
+  exports: [TracksService],
 })
 export class TracksModule {}
