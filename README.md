@@ -47,9 +47,9 @@ npm run test
 
 ## Swagger
 
-```
-You can insert code from doc/api.yaml to https://editor.swagger.io/
-```
+
+After starting the app on port (4000 as default) you can open in your browser [OpenAPI documentation](http://localhost:4000/doc/).
+
 
 <!-- To run only one of all test suites
 
