@@ -1,0 +1,41 @@
+version: '3'
+services:
+  my-node:
+    image: zankorrr/home-service
+    container_name: server
+    build: .
+    ports: 
+      - ${PORT}:${PORT}
+    depends_on:
+      - my-postgress
+    environment:
+      - PORT=${PORT}
+    restart: always
+    volumes:
+      - data:/data/app
+    networks:
+      - home-service-network
+    command: npm run start:dev
+  my-postgress:
+    image: zankorrr/home-service-database
+    container_name: database
+    build: ./database
+    ports:
+      - ${POSTGRESS_PORT}:${POSTGRESS_PORT}
+    environment:
+      - POSTGRESS_PORT=${POSTGRESS_PORT}
+      - POSTGRESS_USER=${POSTGRESS_USER}
+      - POSTGRESS_PASSWORD=${POSTGRESS_PASSWORD}
+      - POSTGRESS_DB=${POSTGRESS_DB}
+    restart: always
+    volumes:
+      - db:/data/db
+    networks:
+      - home-service-network
+    # command: 
+volumes:
+  data:
+  db:
+networks:
+  home-service-network:
+    name: home-service-network
