@@ -1,0 +1,23 @@
+version: '3'
+services:
+  my-node:
+    image: zankorrr/home-service
+    build: .
+    ports: 
+      - ${PORT}:${PORT}
+    # depends_on:
+    #   - my-postgress
+    environment:
+      - PORT=${PORT}
+    restart: always
+  # my-postgress:
+  #   image: zankorrr/home-service-database
+  #   build: ./database
+  #   ports:
+  #     - ${POSTGRESS_PORT}:${POSTGRESS_PORT}
+  #   environment:
+  #     - POSTGRESS_PORT=${POSTGRESS_PORT}
+  #     - POSTGRESS_USER=${POSTGRESS_USER}
+  #     - POSTGRESS_PASSWORD=${POSTGRESS_PASSWORD}
+  #     - POSTGRESS_DB=${POSTGRESS_DB}
+  #   restart: always
