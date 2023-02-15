@@ -2,6 +2,7 @@ version: '3'
 services:
   my-node:
     image: zankorrr/home-service
+    container_name: server
     build: .
     ports: 
       - ${PORT}:${PORT}
@@ -10,8 +11,12 @@ services:
     environment:
       - PORT=${PORT}
     restart: always
+    volumes:
+      - data:/data/app
+    command: npm run start:dev
   # my-postgress:
   #   image: zankorrr/home-service-database
+  #   container_name: database
   #   build: ./database
   #   ports:
   #     - ${POSTGRESS_PORT}:${POSTGRESS_PORT}
@@ -21,3 +26,8 @@ services:
   #     - POSTGRESS_PASSWORD=${POSTGRESS_PASSWORD}
   #     - POSTGRESS_DB=${POSTGRESS_DB}
   #   restart: always
+  #   volumes:
+  #     - db:/data/db  
+volumes:
+  data:
+  # db:
