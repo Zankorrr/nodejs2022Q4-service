@@ -9,12 +9,8 @@
 
 ```
 git clone https://github.com/Zankorrr/nodejs2022Q4-service.git
-```
-
-## Change branch
-
-```
-git checkout develop
+git checkout docker
+cd nodejs2022Q4-service
 ```
 
 ## Installing NPM modules
@@ -32,7 +28,20 @@ rename .env.example to .env
 ## Running application
 
 ```
+docker-compose up
+```
+
+or
+
+```
 npm start
+```
+
+## Vulnerabilities scanning
+### You must be loggined on Docker Hub!
+
+```
+npm run scan
 ```
 
 ## Testing
