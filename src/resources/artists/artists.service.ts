@@ -6,61 +6,64 @@ import { AlbumsService } from '../albums/albums.service';
 import { TracksService } from '../tracks/tracks.service';
 import { FavoritesService } from '../favorites/favorites.service';
 import { ArtistEntity } from './entities/artist.entity';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(
-    private db: InMemoryDB,
-    private readonly albumsService: AlbumsService,
-    private readonly tracksService: TracksService,
-    private readonly favoritesService: FavoritesService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  create(artistDto: CreateArtistDto) {
-    const newArtist = new ArtistEntity(artistDto);
-    this.db.artists.push(newArtist);
-    return newArtist;
+  async create(artistDto: CreateArtistDto) {
+    const { name, grammy } = artistDto;
+    return await this.prisma.artist.create({
+      data: {
+        name,
+        grammy,
+      },
+    });
   }
 
-  findAll() {
-    return this.db.artists;
+  async findAll() {
+    return await this.prisma.artist.findMany();
   }
 
-  findOne(id: string) {
-    const artistIndex = this.db.artists.findIndex((artist) => artist.id === id);
-    if (artistIndex === -1) {
+  async findOne(id: string) {
+    return await this.prisma.artist.findUnique({ where: { id: id } });
+  }
+
+  async update(id: string, artistDto: UpdateArtistDto) {
+    const artist = await this.prisma.artist.findUnique({ where: { id: id } });
+    if (!artist) {
       return null;
     } else {
-      return this.db.artists[artistIndex];
-    }
-  }
-
-  update(id: string, artistDto: UpdateArtistDto) {
-    const artistIndex = this.db.artists.findIndex((artist) => artist.id === id);
-    if (artistIndex === -1) {
-      return null;
-    } else {
-      this.db.artists[artistIndex] = Object.assign(
-        this.db.artists[artistIndex],
-        {
-          ...artistDto,
+      const { name, grammy } = artistDto;
+      await this.prisma.artist.update({
+        where: { id: id },
+        data: {
+          name,
+          grammy,
         },
-      );
-      return this.db.artists[artistIndex];
+      });
+      return this.prisma.artist.findUnique({ where: { id: id } });
     }
   }
 
-  remove(id: string) {
-    const artistIndex = this.db.artists.findIndex((artist) => artist.id === id);
-    if (artistIndex === -1) {
+  async remove(id: string) {
+    const artist = await this.prisma.artist.findUnique({ where: { id: id } });
+    if (!artist) {
       return null;
     } else {
-      this.db.artists.splice(artistIndex, 1);
-      this.albumsService.removeArtistId(id);
-      this.tracksService.removeArtistId(id);
-      try {
-        this.favoritesService.removeArtist(id);
-      } catch (error) {}
+      await this.prisma.artist.delete({ where: { id: id } });
+      await this.prisma.track.updateMany({
+        where: { artistId: id },
+        data: { artistId: null },
+      });
+      await this.prisma.album.updateMany({
+        where: { artistId: id },
+        data: { artistId: null },
+      });
+      // try {
+      //   this.favoritesService.removeArtist(id);
+      // } catch (error) {}
     }
   }
 }
