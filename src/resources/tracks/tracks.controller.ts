@@ -19,18 +19,18 @@ export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
   @Post()
-  create(@Body() trackDto: CreateTrackDto) {
-    return this.tracksService.create(trackDto);
+  async create(@Body() trackDto: CreateTrackDto) {
+    return await this.tracksService.create(trackDto);
   }
 
   @Get()
-  findAll() {
-    return this.tracksService.findAll();
+  async findAll() {
+    return await this.tracksService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.tracksService.findOne(id);
+  async findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const track = await this.tracksService.findOne(id);
     if (!track) {
       throw new NotFoundException('Track not found');
     } else {
@@ -39,26 +39,26 @@ export class TracksController {
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() trackDto: UpdateTrackDto,
   ) {
-    const track = this.tracksService.findOne(id);
+    const track = await this.tracksService.findOne(id);
     if (!track) {
       throw new NotFoundException('Track not found');
     } else {
-      return this.tracksService.update(id, trackDto);
+      return await this.tracksService.update(id, trackDto);
     }
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.tracksService.findOne(id);
+  async remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const track = await this.tracksService.findOne(id);
     if (!track) {
       throw new NotFoundException('Track not found');
     } else {
-      return this.tracksService.remove(id);
+      return await this.tracksService.remove(id);
     }
   }
 }

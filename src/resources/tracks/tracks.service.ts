@@ -4,72 +4,74 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 import { InMemoryDB } from 'src/db/in-memory.db';
 import { TrackEntity } from './entities/track.entity';
 import { FavoritesService } from '../favorites/favorites.service';
+import { PrismaService } from '../../prisma.service';
 
 @Injectable()
 export class TracksService {
-  constructor(
-    private db: InMemoryDB,
-    private readonly favoriteService: FavoritesService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  create(trackDto: CreateTrackDto) {
-    const newTrack = new TrackEntity(trackDto);
-    this.db.tracks.push(newTrack);
-    return newTrack;
-  }
-
-  findAll() {
-    return this.db.tracks;
-  }
-
-  findOne(id: string) {
-    const trackIndex = this.db.tracks.findIndex((track) => track.id === id);
-    if (trackIndex === -1) {
-      return null;
-    } else {
-      return this.db.tracks[trackIndex];
-    }
-  }
-
-  update(id: string, trackDto: UpdateTrackDto) {
-    const trackIndex = this.db.tracks.findIndex((track) => track.id === id);
-    if (trackIndex === -1) {
-      return null;
-    } else {
-      this.db.tracks[trackIndex] = Object.assign(this.db.tracks[trackIndex], {
-        ...trackDto,
-      });
-      return this.db.tracks[trackIndex];
-    }
-  }
-
-  remove(id: string) {
-    const trackIndex = this.db.tracks.findIndex((track) => track.id === id);
-    if (trackIndex === -1) {
-      return null;
-    } else {
-      this.db.tracks.splice(trackIndex, 1);
-      try {
-        this.favoriteService.removeTrack(id);
-      } catch (error) {}
-    }
-  }
-
-  removeArtistId(id: string) {
-    this.db.tracks.forEach((track) => {
-      if (track.artistId === id) {
-        track.artistId = null;
-      }
-      return track;
+  async create(trackDto: CreateTrackDto) {
+    const { name, artistId, albumId, duration } = trackDto;
+    return await this.prisma.track.create({
+      data: {
+        name,
+        artistId,
+        albumId,
+        duration,
+      },
     });
   }
 
-  removeAlbumId(id: string) {
-    this.db.tracks.forEach((track) => {
-      if (track.albumId === id) {
-        track.albumId = null;
-      }
-      return track;
+  async findAll() {
+    return await this.prisma.track.findMany();
+  }
+
+  async findOne(id: string) {
+    return await this.prisma.track.findUnique({ where: { id: id } });
+  }
+
+  async update(id: string, trackDto: UpdateTrackDto) {
+    const track = await this.prisma.track.findUnique({ where: { id: id } });
+    if (!track) {
+      return null;
+    } else {
+      const { name, artistId, albumId, duration } = trackDto;
+      await this.prisma.track.update({
+        where: { id: id },
+        data: {
+          name,
+          artistId,
+          albumId,
+          duration,
+        },
+      });
+      return await this.prisma.track.findUnique({ where: { id: id } });
+    }
+  }
+
+  async remove(id: string) {
+    const track = await this.prisma.track.findUnique({ where: { id: id } });
+    if (!track) {
+      return null;
+    } else {
+      await this.prisma.track.delete({ where: { id: id } });
+      // try {
+      //   this.favoriteService.removeTrack(id);
+      // } catch (error) {}
+    }
+  }
+
+  async removeArtistId(id: string) {
+    await this.prisma.track.updateMany({
+      where: { artistId: id },
+      data: { artistId: null },
+    });
+  }
+
+  async removeAlbumId(id: string) {
+    await this.prisma.track.updateMany({
+      where: { albumId: id },
+      data: { albumId: null },
     });
   }
 }

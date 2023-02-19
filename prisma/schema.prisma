@@ -15,3 +15,11 @@ model User {
   createdAt   Float
   updatedAt   Float
 }
+
+model Track {
+  id          String      @default(uuid()) @id
+  name        String
+  artistId    String?
+  albumId     String?
+  duration    Int
+}
