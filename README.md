@@ -9,7 +9,7 @@
 
 ```
 git clone https://github.com/Zankorrr/nodejs2022Q4-service.git
-git checkout docker
+git checkout postgres
 cd nodejs2022Q4-service
 ```
 
@@ -25,16 +25,30 @@ npm install
 rename .env.example to .env
 ```
 
+## Postgres
+
+```
+Please start your local postgresql, db in docker container doesn`t work :(
+```
+
+## Migration
+
+```
+npx prisma migrate dev --name init
+npx prisma generate
+```
+
 ## Running application
 
 ```
-docker-compose up
+npm start
 ```
 
 or
 
 ```
-npm start
+docker-compose up   // will throw an error - please comment out the 'my-postgres'
+                    // code block in docker-conpose.yml and work with local postrges db
 ```
 
 ## Vulnerabilities scanning

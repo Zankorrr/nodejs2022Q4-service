@@ -19,7 +19,7 @@ services:
   my-postgres:
     image: zankorrr/home-service-database
     container_name: database
-    build: ./database
+    build: ./prisma
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
@@ -27,15 +27,18 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL=${DATABASE_URL}
     restart: always
     volumes:
       - db:/data/db
     networks:
       - home-service-network
-    # command: 
+    command: postgres -c logging_collector=on
 volumes:
   data:
+    name: app
   db:
+    name: db
 networks:
   home-service-network:
     name: home-service-network
