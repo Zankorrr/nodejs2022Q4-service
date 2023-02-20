@@ -17,13 +17,13 @@ export class FavoritesController {
 
   @Get()
   @HttpCode(200)
-  findAll() {
-    return this.favoritesService.findAll();
+  async findAll() {
+    return await this.favoritesService.findAll();
   }
 
   @Post('track/:id')
-  addTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.favoritesService.addTrack(id);
+  async addTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const track = await this.favoritesService.addTrack(id);
     if (!track) {
       throw new UnprocessableEntityException('Track not found');
     }
@@ -32,16 +32,18 @@ export class FavoritesController {
 
   @Delete('track/:id')
   @HttpCode(204)
-  removeTrack(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const track = this.favoritesService.removeTrack(id);
+  async removeTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    const track = await this.favoritesService.removeTrack(id);
     if (!track) {
       throw new NotFoundException('Track was not favorite');
     }
   }
 
   @Post('album/:id')
-  addAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const album = this.favoritesService.addAlbum(id);
+  async addAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    const album = await this.favoritesService.addAlbum(id);
     if (!album) {
       throw new UnprocessableEntityException('Album not found');
     }
@@ -50,16 +52,20 @@ export class FavoritesController {
 
   @Delete('album/:id')
   @HttpCode(204)
-  removeAlbum(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const album = this.favoritesService.removeAlbum(id);
+  async removeAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    const album = await this.favoritesService.removeAlbum(id);
     if (!album) {
       throw new NotFoundException('Album was not favorive');
     }
   }
 
   @Post('artist/:id')
-  addArtist(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const artist = this.favoritesService.addArtist(id);
+  async addArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    const artist = await this.favoritesService.addArtist(id);
     if (!artist) {
       throw new UnprocessableEntityException('Artist not found');
     }
@@ -68,8 +74,10 @@ export class FavoritesController {
 
   @Delete('artist/:id')
   @HttpCode(204)
-  removeArtist(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
-    const artist = this.favoritesService.removeArtist(id);
+  async removeArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
+    const artist = await this.favoritesService.removeArtist(id);
     if (!artist) {
       throw new NotFoundException('Artist was not favorite');
     }

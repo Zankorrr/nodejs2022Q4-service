@@ -58,9 +58,9 @@ export class AlbumsService {
         where: { albumId: id },
         data: { albumId: null },
       });
-      // try {
-      //   this.favoritesService.removeAlbum(id);
-      // } catch (error) {}
+      try {
+        await this.prisma.favoriteAlbum.delete({ where: { id: id } });
+      } catch (error) {}
     }
   }
 

@@ -55,9 +55,9 @@ export class TracksService {
       return null;
     } else {
       await this.prisma.track.delete({ where: { id: id } });
-      // try {
-      //   this.favoriteService.removeTrack(id);
-      // } catch (error) {}
+      try {
+        await this.prisma.favoriteTrack.delete({ where: { id: id } });
+      } catch (error) {}
     }
   }
 

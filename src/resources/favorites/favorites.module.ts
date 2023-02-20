@@ -5,16 +5,12 @@ import { TracksModule } from 'src/resources/tracks/tracks.module';
 import { ArtistsModule } from 'src/resources/artists/artists.module';
 import { AlbumsModule } from 'src/resources/albums/albums.module';
 import { DBModule } from 'src/db/db.module';
+import { PrismaService } from 'src/prisma.service';
 
 @Module({
-  imports: [
-    DBModule,
-    forwardRef(() => ArtistsModule),
-    forwardRef(() => AlbumsModule),
-    forwardRef(() => TracksModule),
-  ],
+  imports: [],
   controllers: [FavoritesController],
-  providers: [FavoritesService],
+  providers: [FavoritesService, PrismaService],
   exports: [FavoritesService],
 })
 export class FavoritesModule {}

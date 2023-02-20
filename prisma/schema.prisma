@@ -36,3 +36,15 @@ model Artist {
   name        String
   grammy      Boolean
 }
+
+model FavoriteArtist {
+  id          String      @id
+}
+
+model FavoriteAlbum {
+  id          String      @id
+}
+
+model FavoriteTrack {
+  id          String      @id
+}

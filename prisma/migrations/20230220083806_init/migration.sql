@@ -39,3 +39,24 @@ CREATE TABLE "Artist" (
 
     CONSTRAINT "Artist_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "FavoriteArtist" (
+    "id" TEXT NOT NULL,
+
+    CONSTRAINT "FavoriteArtist_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FavoriteAlbum" (
+    "id" TEXT NOT NULL,
+
+    CONSTRAINT "FavoriteAlbum_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FavoriteTrack" (
+    "id" TEXT NOT NULL,
+
+    CONSTRAINT "FavoriteTrack_pkey" PRIMARY KEY ("id")
+);

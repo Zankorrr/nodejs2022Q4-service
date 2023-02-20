@@ -61,9 +61,9 @@ export class ArtistsService {
         where: { artistId: id },
         data: { artistId: null },
       });
-      // try {
-      //   this.favoritesService.removeArtist(id);
-      // } catch (error) {}
+      try {
+        await this.prisma.favoriteArtist.delete({ where: { id: id } });
+      } catch (error) {}
     }
   }
 }
