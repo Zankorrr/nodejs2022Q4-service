@@ -1,15 +1,7 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserEntity } from './entities/user.entity';
-import { InMemoryDB } from '../../db/in-memory.db';
-
 import { PrismaService } from '../../prisma.service';
-import { User, Prisma } from '@prisma/client';
 
 const userOutput = {
   id: true,

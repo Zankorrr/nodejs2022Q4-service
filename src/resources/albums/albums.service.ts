@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { InMemoryDB } from 'src/db/in-memory.db';
-import { AlbumEntity } from './entities/album.entity';
-import { TracksService } from '../tracks/tracks.service';
-import { FavoritesService } from '../favorites/favorites.service';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -62,12 +58,5 @@ export class AlbumsService {
         await this.prisma.favoriteAlbum.delete({ where: { id: id } });
       } catch (error) {}
     }
-  }
-
-  async removeArtistId(id: string) {
-    await this.prisma.album.updateMany({
-      where: { artistId: id },
-      data: { artistId: null },
-    });
   }
 }

@@ -1,11 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { InMemoryDB } from 'src/db/in-memory.db';
-import { AlbumsService } from '../albums/albums.service';
-import { TracksService } from '../tracks/tracks.service';
-import { FavoritesService } from '../favorites/favorites.service';
-import { ArtistEntity } from './entities/artist.entity';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()

@@ -1,32 +1,28 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InMemoryDB } from 'src/db/in-memory.db';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { AlbumsService } from '../albums/albums.service';
-import { ArtistsService } from '../artists/artists.service';
-import { TracksService } from '../tracks/tracks.service';
 
 @Injectable()
 export class FavoritesService {
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
-    const artistsIDs = await (
-      await this.prisma.favoriteArtist.findMany()
-    ).map((el) => el.id);
+    const artistsIDs = (await this.prisma.favoriteArtist.findMany()).map(
+      (el) => el.id,
+    );
     const favoriteArtists = await this.prisma.artist.findMany({
       where: { id: { in: artistsIDs } },
     });
 
-    const albumsIDs = await (
-      await this.prisma.favoriteAlbum.findMany()
-    ).map((el) => el.id);
+    const albumsIDs = (await this.prisma.favoriteAlbum.findMany()).map(
+      (el) => el.id,
+    );
     const favoriteAlbums = await this.prisma.album.findMany({
       where: { id: { in: albumsIDs } },
     });
 
-    const tracksIDs = await (
-      await this.prisma.favoriteTrack.findMany()
-    ).map((el) => el.id);
+    const tracksIDs = (await this.prisma.favoriteTrack.findMany()).map(
+      (el) => el.id,
+    );
     const favoriteTracks = await this.prisma.track.findMany({
       where: { id: { in: tracksIDs } },
     });
