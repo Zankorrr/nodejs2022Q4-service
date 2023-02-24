@@ -1,9 +1,11 @@
 version: '3'
 services:
   my-node:
-    image: zankorrr/home-service
+    image: home-service
     container_name: server
-    build: .
+    build:
+        context: .
+        dockerfile: ./Dockerfile
     ports: 
       - ${PORT}:${PORT}
     depends_on:
@@ -12,16 +14,16 @@ services:
       - PORT=${PORT}
     restart: always
     volumes:
-      - data:/data/app
+      - .:/app
     networks:
       - home-service-network
-    command: npm run start:dev
+    command: npm run start
   my-postgres:
-    image: zankorrr/home-service-database
+    image: home-service-database
     container_name: database
-    build: ./prisma
-    ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    build: 
+        context: .
+        dockerfile: ./prisma/Dockerfile
     environment:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -30,15 +32,13 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     restart: always
     volumes:
-      - db:/data/db
+      - pgdata:/var/lib/postgresql/data
     networks:
       - home-service-network
-    command: postgres -c logging_collector=on
+    command: postgres
 volumes:
-  data:
-    name: app
-  db:
-    name: db
+  pgdata:
+    name: pgdata
 networks:
   home-service-network:
     name: home-service-network
