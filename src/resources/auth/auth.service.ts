@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../prisma.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import 'dotenv/config';
 
 const userOutput = {
   id: true,
@@ -14,6 +15,19 @@ const userOutput = {
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+
+  private async getToken(userId: string) {
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: userId,
+      },
+      {
+        secret: process.env.JWT_SECRET_KEY,
+        expiresIn: process.env.TOKEN_EXPIRE_TIME,
+      },
+    );
+    return { accessToken };
+  }
 
   async signup(userDto: CreateUserDto) {
     const user = await this.prisma.user.findFirst({
@@ -40,9 +54,10 @@ export class AuthService {
       where: { login: userDto.login },
     });
     if (user && user.password === userDto.password) {
-      const payload = { login: user.login, sub: user.id };
-      return { access_token: this.jwtService.sign(payload) };
+      const token = await this.getToken(user.id);
+      return token;
+    } else {
+      return null;
     }
-    return null;
   }
 }

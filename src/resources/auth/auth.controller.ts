@@ -1,11 +1,20 @@
-import { Body, Controller, ForbiddenException, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  ForbiddenException,
+  HttpCode,
+  Post,
+} from '@nestjs/common';
+import { Public } from '../../public.decorator';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @HttpCode(201)
   @Post('signup')
   async signup(@Body() userDto: CreateUserDto) {
     const user = await this.authService.signup(userDto);
@@ -16,6 +25,7 @@ export class AuthController {
     }
   }
 
+  @HttpCode(200)
   @Post('login')
   async login(@Body() userDto: CreateUserDto) {
     const token = await this.authService.login(userDto);
