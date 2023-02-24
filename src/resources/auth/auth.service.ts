@@ -34,4 +34,15 @@ export class AuthService {
       });
     }
   }
+
+  async login(userDto: CreateUserDto) {
+    const user = await this.prisma.user.findFirst({
+      where: { login: userDto.login },
+    });
+    if (user && user.password === userDto.password) {
+      const payload = { login: user.login, sub: user.id };
+      return { access_token: this.jwtService.sign(payload) };
+    }
+    return null;
+  }
 }

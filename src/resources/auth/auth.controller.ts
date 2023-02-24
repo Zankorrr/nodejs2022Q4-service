@@ -15,4 +15,14 @@ export class AuthController {
       return user;
     }
   }
+
+  @Post('login')
+  async login(@Body() userDto: CreateUserDto) {
+    const token = await this.authService.login(userDto);
+    if (!token) {
+      throw new ForbiddenException('Wrong username or password');
+    } else {
+      return token;
+    }
+  }
 }
