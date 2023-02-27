@@ -1,0 +1,44 @@
+version: '3'
+services:
+  my-node:
+    image: home-service
+    container_name: server
+    build:
+        context: .
+        dockerfile: ./Dockerfile
+    ports: 
+      - ${PORT}:${PORT}
+    depends_on:
+      - my-postgres
+    environment:
+      - PORT=${PORT}
+    restart: always
+    volumes:
+      - .:/app
+    networks:
+      - home-service-network
+    command: npm run start
+  my-postgres:
+    image: home-service-database
+    container_name: database
+    build: 
+        context: .
+        dockerfile: ./prisma/Dockerfile
+    environment:
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL=${DATABASE_URL}
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - home-service-network
+    command: postgres
+volumes:
+  pgdata:
+    name: pgdata
+networks:
+  home-service-network:
+    name: home-service-network
