@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
-import { readFile } from 'fs/promises';
+import { mkdir, readdir, readFile } from 'fs/promises';
 import { join } from 'path';
 import { parse } from 'yaml';
 import 'dotenv/config';
@@ -15,6 +15,11 @@ async function bootstrap() {
     bufferLogs: true,
   });
   app.useLogger(app.get(MyLogger));
+  try {
+    readdir(join(__dirname, '../log'));
+  } catch (error) {
+    mkdir(join(__dirname, '../log'));
+  }
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 

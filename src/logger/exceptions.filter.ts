@@ -7,6 +7,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { appendFile } from 'fs/promises';
+import { join } from 'path';
 
 @Catch(BadRequestException)
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -30,11 +32,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
     };
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
 
-    console.log(
-      `REQ <- URL: ${responseBody.path}, Query params: ${JSON.stringify(
-        request.query,
-      )}, Body: ${JSON.stringify(request.body)}`,
+    const reqLog = `REQ <- URL: ${
+      responseBody.path
+    }, Query params: ${JSON.stringify(request.query)}, Body: ${JSON.stringify(
+      request.body,
+    )}`;
+    const resLog = `RES -> Status code: ${httpStatus}`;
+    console.log(reqLog);
+    console.log(resLog);
+    appendFile(
+      join(__dirname, '../../log/errors.log'),
+      `${reqLog}\n${resLog}\n`,
     );
-    console.log(`RES -> Status code: ${httpStatus}`);
   }
 }
