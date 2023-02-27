@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { PrismaService } from 'src/prisma.service';
+import { LoggerModule } from 'src/logger/logger.module';
 
 @Module({
-  imports: [],
+  imports: [LoggerModule],
   controllers: [UsersController],
   providers: [UsersService, PrismaService],
 })

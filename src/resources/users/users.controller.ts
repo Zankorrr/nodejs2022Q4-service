@@ -16,10 +16,14 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { MyLogger } from 'src/logger/logger.service';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private myLogger: MyLogger,
+  ) {}
 
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
@@ -30,7 +34,10 @@ export class UsersController {
   @Get()
   @UseInterceptors(ClassSerializerInterceptor)
   async findAll() {
-    return this.usersService.findAll();
+    this.myLogger.queryCustomLog('/user', 'none', 'none');
+    const users = await this.usersService.findAll();
+    this.myLogger.answerCustomLog(users, '200');
+    return users;
   }
 
   @Get(':id')

@@ -7,6 +7,7 @@ import { FavoritesModule } from './resources/favorites/favorites.module';
 import { AuthModule } from './resources/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './resources/auth/jwt-auth.guard';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtAuthGuard } from './resources/auth/jwt-auth.guard';
     AlbumsModule,
     FavoritesModule,
     AuthModule,
+    LoggerModule,
   ],
   providers: [
     {
