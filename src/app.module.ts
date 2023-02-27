@@ -9,6 +9,7 @@ import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './resources/auth/jwt-auth.guard';
 import { LoggerModule } from './logger/logger.module';
 import { LoggerFilter } from './logger/logger.filter';
+import { AllExceptionsFilter } from './logger/exceptions.filter';
 
 @Module({
   imports: [
@@ -24,6 +25,10 @@ import { LoggerFilter } from './logger/logger.filter';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
     },
   ],
 })
